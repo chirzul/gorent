@@ -3,18 +3,26 @@ package orm
 import (
 	"errors"
 	"fmt"
+	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func New() (*gorm.DB, error) {
-	host := "localhost"
-	user := "chirzul"
-	password := "password"
-	dbName := "vehicle_rent_db"
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-	config := fmt.Sprintf("host=%s user=%s password=%s dbname=%s", host, user, password, dbName)
+	DB_HOST := os.Getenv("DB_HOST")
+	DB_USER := os.Getenv("DB_USER")
+	DB_PASSWORD := os.Getenv("DB_PASSWORD")
+	DB_NAME := os.Getenv("DB_NAME")
+
+	config := fmt.Sprintf("host=%s user=%s password=%s dbname=%s", DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
 
 	gormDb, err := gorm.Open(postgres.Open(config), &gorm.Config{})
 
