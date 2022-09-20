@@ -7,15 +7,10 @@ import (
 	"os"
 
 	"github.com/chirzul/gorent/src/routers"
-	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
 	mainRoute, err := routers.New()
 	if err != nil {
 		log.Fatal(err)
