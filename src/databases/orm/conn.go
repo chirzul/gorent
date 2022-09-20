@@ -20,16 +20,16 @@ func New() (*gorm.DB, error) {
 	gormDb, err := gorm.Open(postgres.Open(config), &gorm.Config{})
 
 	if err != nil {
-		return nil, errors.New("gagal init database")
+		return nil, errors.New("failed to init db")
 	}
 
 	db, err := gormDb.DB()
 	if err != nil {
-		return nil, errors.New("gagal init database")
+		return nil, errors.New("failed to init db")
 	}
 
-	db.SetConnMaxIdleTime(10)
-	db.SetMaxOpenConns(100)
+	db.SetConnMaxIdleTime(100)
+	db.SetMaxOpenConns(10)
 
 	return gormDb, nil
 }
