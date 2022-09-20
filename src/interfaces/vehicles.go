@@ -8,6 +8,7 @@ import (
 
 type VehicleRepo interface {
 	FindAllVehicles() (*models.Vehicles, error)
+	FindPopularVehicles() (*models.Vehicles, error)
 	FindVehiclesByName(r *http.Request) (*models.Vehicles, error)
 	SaveVehicle(data *models.Vehicle) (*models.Vehicle, error)
 	ChangeVehicle(r *http.Request, data *models.Vehicle) (*models.Vehicle, error)
@@ -16,6 +17,7 @@ type VehicleRepo interface {
 
 type VehicleService interface {
 	GetAllVehicles() (*models.Vehicles, error)
+	GetPopularVehicles() (*models.Vehicles, error)
 	SearchVehicles(r *http.Request) (*models.Vehicles, error)
 	AddVehicle(data *models.Vehicle) (*models.Vehicle, error)
 	UpdateVehicle(r *http.Request, data *models.Vehicle) (*models.Vehicle, error)
