@@ -20,7 +20,7 @@ func NewRepo(db *gorm.DB) *user_repo {
 func (repo *user_repo) FindAllUsers() (*models.Users, error) {
 	var data models.Users
 
-	result := repo.db.Find(&data)
+	result := repo.db.Order("email ASC").Find(&data)
 
 	if result.Error != nil {
 		return nil, errors.New("failed to get data user")
@@ -32,11 +32,11 @@ func (repo *user_repo) FindAllUsers() (*models.Users, error) {
 	return &data, nil
 }
 
-func (repo *user_repo) SaveUser(r *http.Request, data *models.User) (*models.User, error) {
+func (repo *user_repo) SaveUser(data *models.User) (*models.User, error) {
 	var check models.Users
-	repo.db.Where("name = ?", data.Name).Find(&check)
+	repo.db.Where("email = ?", data.Email).Find(&check)
 	if len(check) > 0 {
-		return nil, errors.New("username already exist")
+		return nil, errors.New("email already registered")
 	}
 
 	result := repo.db.Create(data)

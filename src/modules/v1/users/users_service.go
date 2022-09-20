@@ -20,16 +20,14 @@ func (s *user_service) GetAllUsers() (*models.Users, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return data, nil
 }
 
-func (s *user_service) AddUser(r *http.Request, data *models.User) (*models.User, error) {
-	data, err := s.repo.SaveUser(r, data)
+func (s *user_service) AddUser(data *models.User) (*models.User, error) {
+	data, err := s.repo.SaveUser(data)
 	if err != nil {
 		return nil, err
 	}
-
 	return data, nil
 }
 

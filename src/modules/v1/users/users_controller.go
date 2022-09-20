@@ -35,7 +35,7 @@ func (c *user_ctrl) AddUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		helpers.Response(w, 400, "", err)
 	} else {
-		_, err := c.svc.AddUser(r, &datas)
+		_, err := c.svc.AddUser(&datas)
 		if err != nil {
 			helpers.Response(w, 400, "", err)
 		} else {
