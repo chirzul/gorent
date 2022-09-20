@@ -2,10 +2,8 @@ package users
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/chirzul/gorent/src/databases/orm/models"
-	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
 
@@ -47,24 +45,19 @@ func (repo *user_repo) SaveUser(data *models.User) (*models.User, error) {
 	return data, nil
 }
 
-func (repo *user_repo) ChangeUser(r *http.Request, data *models.User) (*models.User, error) {
-	vars := mux.Vars(r)
-
-	result := repo.db.Model(&data).Where("name = ?", vars["name"]).Updates(data)
+func (repo *user_repo) ChangeUser(data *models.User, email string) (*models.User, error) {
+	result := repo.db.Model(&data).Where("email = ?", email).Updates(data)
 	if result.Error != nil {
 		return nil, errors.New("failed to update data user")
 	}
 	if result.RowsAffected == 0 {
 		return nil, errors.New("data user is not exist")
 	}
-
 	return data, nil
 }
 
-func (repo *user_repo) RemoveUser(r *http.Request, data *models.User) (*models.User, error) {
-	vars := mux.Vars(r)
-	result := repo.db.Where("name = ?", vars["name"]).Delete(data)
-
+func (repo *user_repo) RemoveUser(data *models.User, email string) (*models.User, error) {
+	result := repo.db.Where("email = ?", email).Delete(&data)
 	if result.Error != nil {
 		return nil, errors.New("failed to delete data user")
 	}

@@ -1,8 +1,6 @@
 package users
 
 import (
-	"net/http"
-
 	"github.com/chirzul/gorent/src/databases/orm/models"
 	"github.com/chirzul/gorent/src/interfaces"
 )
@@ -31,8 +29,8 @@ func (s *user_service) AddUser(data *models.User) (*models.User, error) {
 	return data, nil
 }
 
-func (s *user_service) UpdateUser(r *http.Request, data *models.User) (*models.User, error) {
-	data, err := s.repo.ChangeUser(r, data)
+func (s *user_service) UpdateUser(data *models.User, email string) (*models.User, error) {
+	data, err := s.repo.ChangeUser(data, email)
 	if err != nil {
 		return nil, err
 	}
@@ -40,8 +38,8 @@ func (s *user_service) UpdateUser(r *http.Request, data *models.User) (*models.U
 	return data, nil
 }
 
-func (s *user_service) DeleteUser(r *http.Request, data *models.User) (*models.User, error) {
-	data, err := s.repo.RemoveUser(r, data)
+func (s *user_service) DeleteUser(data *models.User, email string) (*models.User, error) {
+	data, err := s.repo.RemoveUser(data, email)
 	if err != nil {
 		return nil, err
 	}

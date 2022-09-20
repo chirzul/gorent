@@ -7,6 +7,7 @@ import (
 	"github.com/chirzul/gorent/src/databases/orm/models"
 	"github.com/chirzul/gorent/src/helpers"
 	"github.com/chirzul/gorent/src/interfaces"
+	"github.com/gorilla/mux"
 )
 
 type user_ctrl struct {
@@ -29,7 +30,6 @@ func (c *user_ctrl) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 
 func (c *user_ctrl) AddUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-
 	var datas models.User
 	err := json.NewDecoder(r.Body).Decode(&datas)
 	if err != nil {
@@ -46,13 +46,13 @@ func (c *user_ctrl) AddUser(w http.ResponseWriter, r *http.Request) {
 
 func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-
-	var datas models.User
+	vars := mux.Vars(r)
+	var datas *models.User
 	err := json.NewDecoder(r.Body).Decode(&datas)
 	if err != nil {
 		helpers.Response(w, 400, "", err)
 	} else {
-		_, err := c.svc.UpdateUser(r, &datas)
+		_, err := c.svc.UpdateUser(datas, vars["email"])
 		if err != nil {
 			helpers.Response(w, 400, "", err)
 		} else {
@@ -63,8 +63,9 @@ func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 func (c *user_ctrl) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	var datas models.User
-	_, err := c.svc.DeleteUser(r, &datas)
+	var datas *models.User
+	vars := mux.Vars(r)
+	_, err := c.svc.DeleteUser(datas, vars["email"])
 	if err != nil {
 		helpers.Response(w, 400, "", err)
 	} else {
