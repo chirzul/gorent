@@ -15,7 +15,7 @@ func New() (*mux.Router, error) {
 
 	db, err := orm.New()
 	if err != nil {
-		return nil, errors.New("gagal init database")
+		return nil, errors.New("failed to init database")
 	}
 
 	users.New(mainRoute, db)
