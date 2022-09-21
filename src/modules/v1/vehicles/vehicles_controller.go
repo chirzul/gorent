@@ -3,10 +3,12 @@ package vehicles
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/chirzul/gorent/src/databases/orm/models"
 	"github.com/chirzul/gorent/src/helpers"
 	"github.com/chirzul/gorent/src/interfaces"
+	"github.com/gorilla/mux"
 )
 
 type vehicle_ctrl struct {
@@ -39,7 +41,8 @@ func (c *vehicle_ctrl) GetPopularVehicles(w http.ResponseWriter, r *http.Request
 
 func (c *vehicle_ctrl) SearchVehicles(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	data, err := c.svc.SearchVehicles(r)
+	vars := strings.ToLower(r.URL.Query().Get("name"))
+	data, err := c.svc.SearchVehicles(vars)
 	if err != nil {
 		helpers.Response(w, 400, "", err)
 	} else {
@@ -68,11 +71,12 @@ func (c *vehicle_ctrl) AddVehicle(w http.ResponseWriter, r *http.Request) {
 func (c *vehicle_ctrl) UpdateVehicle(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	var datas models.Vehicle
+	vars := mux.Vars(r)
 	err := json.NewDecoder(r.Body).Decode(&datas)
 	if err != nil {
 		helpers.Response(w, 400, "", err)
 	} else {
-		_, err := c.svc.UpdateVehicle(r, &datas)
+		_, err := c.svc.UpdateVehicle(&datas, vars["vehicle_id"])
 		if err != nil {
 			helpers.Response(w, 400, "", err)
 		} else {
@@ -84,8 +88,9 @@ func (c *vehicle_ctrl) UpdateVehicle(w http.ResponseWriter, r *http.Request) {
 
 func (c *vehicle_ctrl) DeleteVehicle(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	var datas models.Vehicle
-	_, err := c.svc.DeleteVehicle(r, &datas)
+	var datas *models.Vehicle
+	vars := mux.Vars(r)
+	_, err := c.svc.DeleteVehicle(datas, vars["vehicle_id"])
 	if err != nil {
 		helpers.Response(w, 400, "", err)
 	} else {

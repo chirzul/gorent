@@ -1,8 +1,6 @@
 package vehicles
 
 import (
-	"net/http"
-
 	"github.com/chirzul/gorent/src/databases/orm/models"
 	"github.com/chirzul/gorent/src/interfaces"
 )
@@ -33,8 +31,8 @@ func (s *vehicle_service) GetPopularVehicles() (*models.Vehicles, error) {
 	return data, nil
 }
 
-func (s *vehicle_service) SearchVehicles(r *http.Request) (*models.Vehicles, error) {
-	data, err := s.repo.FindVehiclesByName(r)
+func (s *vehicle_service) SearchVehicles(name string) (*models.Vehicles, error) {
+	data, err := s.repo.FindVehiclesByName(name)
 	if err != nil {
 		return nil, err
 	}
@@ -51,8 +49,8 @@ func (s *vehicle_service) AddVehicle(data *models.Vehicle) (*models.Vehicle, err
 	return data, nil
 }
 
-func (s *vehicle_service) UpdateVehicle(r *http.Request, data *models.Vehicle) (*models.Vehicle, error) {
-	data, err := s.repo.ChangeVehicle(r, data)
+func (s *vehicle_service) UpdateVehicle(data *models.Vehicle, id string) (*models.Vehicle, error) {
+	data, err := s.repo.ChangeVehicle(data, id)
 	if err != nil {
 		return nil, err
 	}
@@ -60,8 +58,8 @@ func (s *vehicle_service) UpdateVehicle(r *http.Request, data *models.Vehicle) (
 	return data, nil
 }
 
-func (s *vehicle_service) DeleteVehicle(r *http.Request, data *models.Vehicle) (*models.Vehicle, error) {
-	data, err := s.repo.RemoveVehicle(r, data)
+func (s *vehicle_service) DeleteVehicle(data *models.Vehicle, id string) (*models.Vehicle, error) {
+	data, err := s.repo.RemoveVehicle(data, id)
 	if err != nil {
 		return nil, err
 	}
