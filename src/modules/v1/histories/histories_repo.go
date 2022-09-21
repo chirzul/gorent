@@ -2,10 +2,9 @@ package histories
 
 import (
 	"errors"
-	"net/http"
+	"fmt"
 
 	"github.com/chirzul/gorent/src/databases/orm/models"
-	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +16,7 @@ func NewRepo(db *gorm.DB) *history_repo {
 	return &history_repo{db}
 }
 
-func (repo *history_repo) FindAllHistories() (*models.Histories, error) {
+func (repo *history_repo) GetAllHistories() (*models.Histories, error) {
 	var data models.Histories
 	result := repo.db.
 		Preload("User", func(db *gorm.DB) *gorm.DB {
@@ -38,18 +37,16 @@ func (repo *history_repo) FindAllHistories() (*models.Histories, error) {
 	return &data, nil
 }
 
-func (repo *history_repo) FindHistory(r *http.Request) (*models.Histories, error) {
+func (repo *history_repo) SearchHistory(query map[string]string) (*models.Histories, error) {
 	var data models.Histories
 	var result *gorm.DB
 
-	varsVehicle := r.URL.Query().Get("vehicle_id")
-	varsUser := r.URL.Query().Get("user_id")
-
-	if varsVehicle != "" {
-		result = repo.db.Order("created_at desc").Where("vehicle_id = ?", varsVehicle).Find(&data)
+	fmt.Println(query)
+	if query["vehicle_id"] != "" {
+		result = repo.db.Order("created_at desc").Where("vehicle_id = ?", query["vehicle_id"]).Find(&data)
 	}
-	if varsUser != "" {
-		result = repo.db.Order("created_at desc").Where("user_id = ?", varsUser).Find(&data)
+	if query["user_id"] != "" {
+		result = repo.db.Order("created_at desc").Where("user_id = ?", query["user_id"]).Find(&data)
 	}
 	if result.Error != nil {
 		return nil, errors.New("failed to get data vehicle")
@@ -61,7 +58,7 @@ func (repo *history_repo) FindHistory(r *http.Request) (*models.Histories, error
 	return &data, nil
 }
 
-func (repo *history_repo) SaveHistory(data *models.History) (*models.History, error) {
+func (repo *history_repo) AddHistory(data *models.History) (*models.History, error) {
 	var checkUser models.Users
 	repo.db.Where("user_id = ?", data.UserID).Find(&checkUser)
 	if len(checkUser) == 0 {
@@ -86,30 +83,24 @@ func (repo *history_repo) SaveHistory(data *models.History) (*models.History, er
 	return data, nil
 }
 
-func (repo *history_repo) ChangeHistory(r *http.Request, data *models.History) (*models.History, error) {
-	vars := mux.Vars(r)
-	result := repo.db.Model(&data).Where("history_id = ?", vars["history_id"]).Updates(data)
-
+func (repo *history_repo) UpdateHistory(data *models.History, id string) (*models.History, error) {
+	result := repo.db.Model(&data).Where("history_id = ?", id).Updates(data)
 	if result.Error != nil {
 		return nil, errors.New("failed to update data")
 	}
-	if result.RowsAffected == 0 {
-		return nil, errors.New("data history is not exist")
-	}
-
 	return data, nil
 }
 
-func (repo *history_repo) RemoveHistory(r *http.Request, data *models.History) (*models.History, error) {
-	vars := mux.Vars(r)
-	result := repo.db.Delete(data, vars["history_id"])
-
+func (repo *history_repo) DeleteHistory(data *models.History, id string) (*models.History, error) {
+	result := repo.db.Delete(&data, id)
 	if result.Error != nil {
 		return nil, errors.New("failed to delete data history")
 	}
-	if result.RowsAffected == 0 {
-		return nil, errors.New("data history is not exist")
-	}
-
 	return data, nil
+}
+
+func (repo *history_repo) CheckHistory(id string) bool {
+	var data models.History
+	result := repo.db.First(&data, "history_id = ?", id)
+	return result.Error == nil
 }

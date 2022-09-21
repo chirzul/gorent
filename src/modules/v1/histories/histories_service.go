@@ -1,10 +1,9 @@
 package histories
 
 import (
-	"net/http"
-
 	"github.com/chirzul/gorent/src/databases/orm/models"
 	"github.com/chirzul/gorent/src/interfaces"
+	"github.com/chirzul/gorent/src/libs"
 )
 
 type history_service struct {
@@ -15,47 +14,48 @@ func NewService(repo interfaces.HistoryRepo) *history_service {
 	return &history_service{repo}
 }
 
-func (s *history_service) GetAllHistories() (*models.Histories, error) {
-	data, err := s.repo.FindAllHistories()
+func (s *history_service) GetAllHistories() *libs.Response {
+	data, err := s.repo.GetAllHistories()
 	if err != nil {
-		return nil, err
+		return libs.GetResponse(err.Error(), 400, true)
 	}
-
-	return data, nil
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *history_service) SearchHistory(r *http.Request) (*models.Histories, error) {
-	data, err := s.repo.FindHistory(r)
+func (s *history_service) SearchHistory(query map[string]string) *libs.Response {
+	data, err := s.repo.SearchHistory(query)
 	if err != nil {
-		return nil, err
+		return libs.GetResponse(err.Error(), 400, true)
 	}
-
-	return data, nil
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *history_service) AddHistory(data *models.History) (*models.History, error) {
-	data, err := s.repo.SaveHistory(data)
+func (s *history_service) AddHistory(data *models.History) *libs.Response {
+	data, err := s.repo.AddHistory(data)
 	if err != nil {
-		return nil, err
+		return libs.GetResponse(err.Error(), 400, true)
 	}
-
-	return data, nil
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *history_service) UpdateHistory(r *http.Request, data *models.History) (*models.History, error) {
-	data, err := s.repo.ChangeHistory(r, data)
-	if err != nil {
-		return nil, err
+func (s *history_service) UpdateHistory(data *models.History, id string) *libs.Response {
+	if checkHistory := s.repo.CheckHistory(id); !checkHistory {
+		return libs.GetResponse("history not found", 404, true)
 	}
-
-	return data, nil
+	data, err := s.repo.UpdateHistory(data, id)
+	if err != nil {
+		return libs.GetResponse(err.Error(), 400, true)
+	}
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *history_service) DeleteHistory(r *http.Request, data *models.History) (*models.History, error) {
-	data, err := s.repo.RemoveHistory(r, data)
-	if err != nil {
-		return nil, err
+func (s *history_service) DeleteHistory(data *models.History, id string) *libs.Response {
+	if checkHistory := s.repo.CheckHistory(id); !checkHistory {
+		return libs.GetResponse("history not found", 404, true)
 	}
-
-	return data, nil
+	data, err := s.repo.DeleteHistory(data, id)
+	if err != nil {
+		return libs.GetResponse(err.Error(), 400, true)
+	}
+	return libs.GetResponse(data, 200, false)
 }

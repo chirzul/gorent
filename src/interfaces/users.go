@@ -6,10 +6,10 @@ import (
 )
 
 type UserRepo interface {
-	FindAllUsers() (*models.Users, error)
-	SaveUser(data *models.User) (*models.User, error)
-	ChangeUser(data *models.User, username string) (*models.User, error)
-	RemoveUser(data *models.User, username string) (*models.User, error)
+	GetAllUsers() (*models.Users, error)
+	AddUser(data *models.User) (*models.User, error)
+	UpdateUser(data *models.User, username string) (*models.User, error)
+	DeleteUser(data *models.User, username string) (*models.User, error)
 	CheckUsername(username string) bool
 	CheckEmail(email string) bool
 }

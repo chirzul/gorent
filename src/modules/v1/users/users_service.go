@@ -15,7 +15,7 @@ func NewService(repo interfaces.UserRepo) *user_service {
 }
 
 func (s *user_service) GetAllUsers() *libs.Response {
-	data, err := s.repo.FindAllUsers()
+	data, err := s.repo.GetAllUsers()
 	if err != nil {
 		return libs.GetResponse(err.Error(), 400, true)
 	}
@@ -29,7 +29,7 @@ func (s *user_service) AddUser(data *models.User) *libs.Response {
 	if checkEmail := s.repo.CheckEmail(data.Email); checkEmail {
 		return libs.GetResponse("email is already registered", 400, true)
 	}
-	data, err := s.repo.SaveUser(data)
+	data, err := s.repo.AddUser(data)
 	if err != nil {
 		return libs.GetResponse(err.Error(), 400, true)
 	}
@@ -40,7 +40,7 @@ func (s *user_service) UpdateUser(data *models.User, username string) *libs.Resp
 	if checkUsername := s.repo.CheckUsername(username); !checkUsername {
 		return libs.GetResponse("username not found", 404, true)
 	}
-	data, err := s.repo.ChangeUser(data, username)
+	data, err := s.repo.UpdateUser(data, username)
 	if err != nil {
 		return libs.GetResponse(err.Error(), 400, true)
 	}
@@ -51,7 +51,7 @@ func (s *user_service) DeleteUser(data *models.User, username string) *libs.Resp
 	if checkUsername := s.repo.CheckUsername(username); !checkUsername {
 		return libs.GetResponse("username not found", 404, true)
 	}
-	data, err := s.repo.RemoveUser(data, username)
+	data, err := s.repo.DeleteUser(data, username)
 	if err != nil {
 		return libs.GetResponse(err.Error(), 400, true)
 	}

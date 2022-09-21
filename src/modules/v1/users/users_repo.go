@@ -15,7 +15,7 @@ func NewRepo(db *gorm.DB) *user_repo {
 	return &user_repo{db}
 }
 
-func (repo *user_repo) FindAllUsers() (*models.Users, error) {
+func (repo *user_repo) GetAllUsers() (*models.Users, error) {
 	var data models.Users
 
 	result := repo.db.Order("username ASC").Find(&data)
@@ -30,7 +30,7 @@ func (repo *user_repo) FindAllUsers() (*models.Users, error) {
 	return &data, nil
 }
 
-func (repo *user_repo) SaveUser(data *models.User) (*models.User, error) {
+func (repo *user_repo) AddUser(data *models.User) (*models.User, error) {
 	result := repo.db.Create(data)
 	if result.Error != nil {
 		return nil, errors.New("failed to add data user")
@@ -38,15 +38,15 @@ func (repo *user_repo) SaveUser(data *models.User) (*models.User, error) {
 	return data, nil
 }
 
-func (repo *user_repo) ChangeUser(data *models.User, username string) (*models.User, error) {
-	result := repo.db.Model(&data).Where("username = ?", username).Updates(data)
+func (repo *user_repo) UpdateUser(data *models.User, username string) (*models.User, error) {
+	result := repo.db.Model(data).Where("username = ?", username).Updates(data)
 	if result.Error != nil {
 		return nil, errors.New("failed to update data user")
 	}
 	return data, nil
 }
 
-func (repo *user_repo) RemoveUser(data *models.User, username string) (*models.User, error) {
+func (repo *user_repo) DeleteUser(data *models.User, username string) (*models.User, error) {
 	result := repo.db.Where("username = ?", username).Delete(&data)
 	if result.Error != nil {
 		return nil, errors.New("failed to delete data user")

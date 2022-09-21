@@ -3,6 +3,7 @@ package vehicles
 import (
 	"github.com/chirzul/gorent/src/databases/orm/models"
 	"github.com/chirzul/gorent/src/interfaces"
+	"github.com/chirzul/gorent/src/libs"
 )
 
 type vehicle_service struct {
@@ -13,56 +14,57 @@ func NewService(repo interfaces.VehicleRepo) *vehicle_service {
 	return &vehicle_service{repo}
 }
 
-func (s *vehicle_service) GetAllVehicles() (*models.Vehicles, error) {
-	data, err := s.repo.FindAllVehicles()
+func (s *vehicle_service) GetAllVehicles() *libs.Response {
+	data, err := s.repo.GetAllVehicles()
 	if err != nil {
-		return nil, err
+		return libs.GetResponse(err.Error(), 400, true)
 	}
-
-	return data, nil
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *vehicle_service) GetPopularVehicles() (*models.Vehicles, error) {
-	data, err := s.repo.FindPopularVehicles()
+func (s *vehicle_service) GetPopularVehicles() *libs.Response {
+	data, err := s.repo.GetPopularVehicles()
 	if err != nil {
-		return nil, err
+		return libs.GetResponse(err.Error(), 400, true)
 	}
-
-	return data, nil
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *vehicle_service) SearchVehicles(name string) (*models.Vehicles, error) {
-	data, err := s.repo.FindVehiclesByName(name)
+func (s *vehicle_service) SearchVehicles(name string) *libs.Response {
+	data, err := s.repo.SearchVehicles(name)
 	if err != nil {
-		return nil, err
+		return libs.GetResponse(err.Error(), 400, true)
 	}
-
-	return data, nil
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *vehicle_service) AddVehicle(data *models.Vehicle) (*models.Vehicle, error) {
-	data, err := s.repo.SaveVehicle(data)
+func (s *vehicle_service) AddVehicle(data *models.Vehicle) *libs.Response {
+	data, err := s.repo.AddVehicle(data)
 	if err != nil {
-		return nil, err
+		return libs.GetResponse(err.Error(), 400, true)
 	}
-
-	return data, nil
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *vehicle_service) UpdateVehicle(data *models.Vehicle, id string) (*models.Vehicle, error) {
-	data, err := s.repo.ChangeVehicle(data, id)
-	if err != nil {
-		return nil, err
+func (s *vehicle_service) UpdateVehicle(data *models.Vehicle, id string) *libs.Response {
+	if checkVehicle := s.repo.CheckVehicle(id); !checkVehicle {
+		return libs.GetResponse("vehicle not found", 404, true)
 	}
-
-	return data, nil
+	data, err := s.repo.UpdateVehicle(data, id)
+	if err != nil {
+		return libs.GetResponse(err.Error(), 400, true)
+	}
+	return libs.GetResponse(data, 200, false)
 }
 
-func (s *vehicle_service) DeleteVehicle(data *models.Vehicle, id string) (*models.Vehicle, error) {
-	data, err := s.repo.RemoveVehicle(data, id)
+func (s *vehicle_service) DeleteVehicle(data *models.Vehicle, id string) *libs.Response {
+	if checkVehicle := s.repo.CheckVehicle(id); !checkVehicle {
+		return libs.GetResponse("vehicle not found", 404, true)
+	}
+	data, err := s.repo.DeleteVehicle(data, id)
 	if err != nil {
-		return nil, err
+		return libs.GetResponse(err.Error(), 400, true)
 	}
 
-	return data, nil
+	return libs.GetResponse(data, 200, false)
 }
