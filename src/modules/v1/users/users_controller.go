@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/chirzul/gorent/src/databases/orm/models"
-	"github.com/chirzul/gorent/src/helpers"
 	"github.com/chirzul/gorent/src/interfaces"
+	"github.com/chirzul/gorent/src/libs"
 	"github.com/gorilla/mux"
 )
 
@@ -19,56 +19,32 @@ func NewCtrl(s interfaces.UserService) *user_ctrl {
 }
 
 func (c *user_ctrl) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
-	data, err := c.svc.GetAllUsers()
-	if err != nil {
-		helpers.Response(w, 400, "error", err)
-	} else {
-		helpers.Response(w, 200, "success get data", err, data)
-	}
+	c.svc.GetAllUsers().Send(w)
 }
 
 func (c *user_ctrl) AddUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
 	var datas models.User
 	err := json.NewDecoder(r.Body).Decode(&datas)
 	if err != nil {
-		helpers.Response(w, 400, "", err)
-	} else {
-		_, err := c.svc.AddUser(&datas)
-		if err != nil {
-			helpers.Response(w, 400, "", err)
-		} else {
-			helpers.Response(w, 201, "success add data", err)
-		}
+		libs.GetResponse(err.Error(), 500, true)
+		return
 	}
+	c.svc.AddUser(&datas).Send(w)
 }
 
 func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
 	vars := mux.Vars(r)
 	var datas *models.User
 	err := json.NewDecoder(r.Body).Decode(&datas)
 	if err != nil {
-		helpers.Response(w, 400, "", err)
-	} else {
-		_, err := c.svc.UpdateUser(datas, vars["email"])
-		if err != nil {
-			helpers.Response(w, 400, "", err)
-		} else {
-			helpers.Response(w, 200, "success update data", err)
-		}
+		libs.GetResponse(err.Error(), 500, true)
+		return
 	}
+	c.svc.UpdateUser(datas, vars["username"]).Send(w)
 }
 
 func (c *user_ctrl) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
-	var datas *models.User
+	var datas models.User
 	vars := mux.Vars(r)
-	_, err := c.svc.DeleteUser(datas, vars["email"])
-	if err != nil {
-		helpers.Response(w, 400, "", err)
-	} else {
-		helpers.Response(w, 200, "success delete data", err)
-	}
+	c.svc.DeleteUser(&datas, vars["username"]).Send(w)
 }
