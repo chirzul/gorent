@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/chirzul/gorent/src/databases/orm"
+	"github.com/chirzul/gorent/src/modules/v1/auth"
 	"github.com/chirzul/gorent/src/modules/v1/histories"
 	"github.com/chirzul/gorent/src/modules/v1/users"
 	"github.com/chirzul/gorent/src/modules/v1/vehicles"
@@ -18,6 +19,7 @@ func New() (*mux.Router, error) {
 		return nil, errors.New("failed to init database")
 	}
 
+	auth.New(mainRoute, db)
 	users.New(mainRoute, db)
 	vehicles.New(mainRoute, db)
 	histories.New(mainRoute, db)
