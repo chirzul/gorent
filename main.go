@@ -16,7 +16,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	PORT := os.Getenv("PORT")
+	PORT := os.Getenv("APP_PORT")
 
 	fmt.Println("service run on port", PORT)
 	http.ListenAndServe(PORT, mainRoute)
