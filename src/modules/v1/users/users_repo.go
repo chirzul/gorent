@@ -30,6 +30,17 @@ func (repo *user_repo) GetAllUsers() (*models.Users, error) {
 	return &data, nil
 }
 
+func (repo *user_repo) FindByUsername(username string) (*models.User, error) {
+	var data models.User
+
+	result := repo.db.First(&data, "username = ?", username)
+
+	if result.Error != nil {
+		return nil, errors.New("failed to get data user")
+	}
+	return &data, nil
+}
+
 func (repo *user_repo) AddUser(data *models.User) (*models.User, error) {
 	result := repo.db.Create(data)
 	if result.Error != nil {

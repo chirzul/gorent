@@ -22,6 +22,11 @@ func (c *user_ctrl) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	c.svc.GetAllUsers().Send(w)
 }
 
+func (c *user_ctrl) FindByUsername(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	c.svc.FindByUsername(vars["username"]).Send(w)
+}
+
 func (c *user_ctrl) AddUser(w http.ResponseWriter, r *http.Request) {
 	var datas *models.User
 	err := json.NewDecoder(r.Body).Decode(&datas)
