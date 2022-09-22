@@ -1,6 +1,7 @@
 package vehicles
 
 import (
+	"github.com/chirzul/gorent/src/middlewares"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
@@ -13,9 +14,9 @@ func New(rt *mux.Router, db *gorm.DB) {
 	ctrl := NewCtrl(svc)
 
 	route.HandleFunc("", ctrl.GetAllVehicles).Methods("GET")
-	route.HandleFunc("", ctrl.AddVehicle).Methods("POST")
+	route.HandleFunc("", middlewares.CheckAuth(ctrl.AddVehicle)).Methods("POST")
 	route.HandleFunc("/popular/", ctrl.GetPopularVehicles).Methods("GET")
 	route.HandleFunc("/search/", ctrl.SearchVehicles).Methods("GET")
-	route.HandleFunc("/{vehicle_id}", ctrl.UpdateVehicle).Methods("PUT")
-	route.HandleFunc("/{vehicle_id}", ctrl.DeleteVehicle).Methods("DELETE")
+	route.HandleFunc("/{vehicle_id}", middlewares.CheckAuth(ctrl.UpdateVehicle)).Methods("PUT")
+	route.HandleFunc("/{vehicle_id}", middlewares.CheckAuth(ctrl.DeleteVehicle)).Methods("DELETE")
 }

@@ -14,8 +14,8 @@ func New(rt *mux.Router, db *gorm.DB) {
 	ctrl := NewCtrl(svc)
 
 	route.HandleFunc("", middlewares.CheckAuth(ctrl.GetAllUsers)).Methods("GET")
-	route.HandleFunc("/{username}", ctrl.FindByUsername).Methods("GET")
-	route.HandleFunc("", ctrl.AddUser).Methods("POST")
-	route.HandleFunc("/{username}", ctrl.UpdateUser).Methods("PUT")
-	route.HandleFunc("/{username}", ctrl.DeleteUser).Methods("DELETE")
+	route.HandleFunc("/{username}", middlewares.CheckAuth(ctrl.FindByUsername)).Methods("GET")
+	route.HandleFunc("", middlewares.CheckAuth(ctrl.AddUser)).Methods("POST")
+	route.HandleFunc("/{username}", middlewares.CheckAuth(ctrl.UpdateUser)).Methods("PUT")
+	route.HandleFunc("/{username}", middlewares.CheckAuth(ctrl.DeleteUser)).Methods("DELETE")
 }

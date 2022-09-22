@@ -1,6 +1,7 @@
 package histories
 
 import (
+	"github.com/chirzul/gorent/src/middlewares"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
@@ -12,9 +13,9 @@ func New(rt *mux.Router, db *gorm.DB) {
 	svc := NewService(repo)
 	ctrl := NewCtrl(svc)
 
-	route.HandleFunc("", ctrl.GetAllHistories).Methods("GET")
-	route.HandleFunc("", ctrl.AddHistory).Methods("POST")
-	route.HandleFunc("/search/", ctrl.SearchHistory).Methods("GET")
-	route.HandleFunc("/{history_id}", ctrl.UpdateHistory).Methods("PUT")
-	route.HandleFunc("/{history_id}", ctrl.DeleteHistory).Methods("DELETE")
+	route.HandleFunc("", middlewares.CheckAuth(ctrl.GetAllHistories)).Methods("GET")
+	route.HandleFunc("", middlewares.CheckAuth(ctrl.AddHistory)).Methods("POST")
+	route.HandleFunc("/search/", middlewares.CheckAuth(ctrl.SearchHistory)).Methods("GET")
+	route.HandleFunc("/{history_id}", middlewares.CheckAuth(ctrl.UpdateHistory)).Methods("PUT")
+	route.HandleFunc("/{history_id}", middlewares.CheckAuth(ctrl.DeleteHistory)).Methods("DELETE")
 }
