@@ -7,6 +7,7 @@ import (
 
 type UserRepo interface {
 	GetAllUsers() (*models.Users, error)
+	FindByUsername(username string) (*models.User, error)
 	AddUser(data *models.User) (*models.User, error)
 	UpdateUser(data *models.User, username string) (*models.User, error)
 	DeleteUser(data *models.User, username string) (*models.User, error)
@@ -16,6 +17,7 @@ type UserRepo interface {
 
 type UserService interface {
 	GetAllUsers() *libs.Response
+	FindByUsername(username string) *libs.Response
 	AddUser(data *models.User) *libs.Response
 	UpdateUser(data *models.User, username string) *libs.Response
 	DeleteUser(data *models.User, username string) *libs.Response
