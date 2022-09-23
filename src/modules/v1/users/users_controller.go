@@ -23,8 +23,8 @@ func (c *user_ctrl) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *user_ctrl) FindByUsername(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	c.svc.FindByUsername(vars["username"]).Send(w)
+	username := r.Context().Value("username").(string)
+	c.svc.FindByUsername(username).Send(w)
 }
 
 func (c *user_ctrl) AddUser(w http.ResponseWriter, r *http.Request) {
@@ -38,14 +38,14 @@ func (c *user_ctrl) AddUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
+	username := r.Context().Value("username").(string)
 	var datas *models.User
 	err := json.NewDecoder(r.Body).Decode(&datas)
 	if err != nil {
 		libs.GetResponse(err.Error(), 500, true)
 		return
 	}
-	c.svc.UpdateUser(datas, vars["username"]).Send(w)
+	c.svc.UpdateUser(datas, username).Send(w)
 }
 
 func (c *user_ctrl) DeleteUser(w http.ResponseWriter, r *http.Request) {
