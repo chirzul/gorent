@@ -1,23 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
 	"os"
 
-	"github.com/chirzul/gorent/src/routers"
+	"github.com/chirzul/gorent/src/config"
 	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
-	mainRoute, err := routers.New()
-	if err != nil {
+	if err := config.Run(os.Args[1:]); err != nil {
 		log.Fatal(err)
 	}
-
-	PORT := os.Getenv("APP_PORT")
-
-	fmt.Println("service run on port", PORT)
-	http.ListenAndServe(PORT, mainRoute)
 }
