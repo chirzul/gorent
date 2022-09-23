@@ -13,9 +13,9 @@ func New(rt *mux.Router, db *gorm.DB) {
 	svc := NewService(repo)
 	ctrl := NewCtrl(svc)
 
-	route.HandleFunc("", middlewares.CheckAuth(ctrl.GetAllUsers)).Methods("GET")
+	route.HandleFunc("", middlewares.CheckAuth(ctrl.GetAllUsers, []string{"admin"})).Methods("GET")
 	route.HandleFunc("", ctrl.AddUser).Methods("POST")
-	route.HandleFunc("/profile", middlewares.CheckAuth(ctrl.FindByUsername)).Methods("GET")
-	route.HandleFunc("/profile", middlewares.CheckAuth(ctrl.UpdateUser)).Methods("PUT")
-	route.HandleFunc("/{username}", middlewares.CheckAuth(ctrl.DeleteUser)).Methods("DELETE")
+	route.HandleFunc("/profile", middlewares.CheckAuth(ctrl.FindByUsername, []string{"user", "admin"})).Methods("GET")
+	route.HandleFunc("/profile", middlewares.CheckAuth(ctrl.UpdateUser, []string{"user", "admin"})).Methods("PUT")
+	route.HandleFunc("/{username}", middlewares.CheckAuth(ctrl.DeleteUser, []string{"user", "admin"})).Methods("DELETE")
 }

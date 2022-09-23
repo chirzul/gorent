@@ -13,9 +13,9 @@ func New(rt *mux.Router, db *gorm.DB) {
 	svc := NewService(repo)
 	ctrl := NewCtrl(svc)
 
-	route.HandleFunc("", middlewares.CheckAuth(ctrl.GetAllHistories)).Methods("GET")
-	route.HandleFunc("", middlewares.CheckAuth(ctrl.AddHistory)).Methods("POST")
-	route.HandleFunc("/search/", middlewares.CheckAuth(ctrl.SearchHistory)).Methods("GET")
-	route.HandleFunc("/{history_id}", middlewares.CheckAuth(ctrl.UpdateHistory)).Methods("PUT")
-	route.HandleFunc("/{history_id}", middlewares.CheckAuth(ctrl.DeleteHistory)).Methods("DELETE")
+	route.HandleFunc("", middlewares.CheckAuth(ctrl.GetAllHistories, []string{"user", "admin"})).Methods("GET")
+	route.HandleFunc("", middlewares.CheckAuth(ctrl.AddHistory, []string{"admin"})).Methods("POST")
+	route.HandleFunc("/search/", middlewares.CheckAuth(ctrl.SearchHistory, []string{"user", "admin"})).Methods("GET")
+	route.HandleFunc("/{history_id}", middlewares.CheckAuth(ctrl.UpdateHistory, []string{"admin"})).Methods("PUT")
+	route.HandleFunc("/{history_id}", middlewares.CheckAuth(ctrl.DeleteHistory, []string{"admin"})).Methods("DELETE")
 }
