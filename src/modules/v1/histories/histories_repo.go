@@ -2,7 +2,6 @@ package histories
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/chirzul/gorent/src/databases/orm/models"
 	"gorm.io/gorm"
@@ -41,12 +40,27 @@ func (repo *history_repo) SearchHistory(query map[string]string) (*models.Histor
 	var data models.Histories
 	var result *gorm.DB
 
-	fmt.Println(query)
 	if query["vehicle_id"] != "" {
-		result = repo.db.Order("created_at desc").Where("vehicle_id = ?", query["vehicle_id"]).Find(&data)
+		result = repo.db.
+			Preload("User", func(db *gorm.DB) *gorm.DB {
+				return db.Select("user_id, name, created_at, updated_at")
+			}).
+			Preload("Vehicle", func(db *gorm.DB) *gorm.DB {
+				return db.Select("vehicle_id, name, created_at, updated_at")
+			}).
+			Order("created_at desc").
+			Where("vehicle_id = ?", query["vehicle_id"]).Find(&data)
 	}
 	if query["user_id"] != "" {
-		result = repo.db.Order("created_at desc").Where("user_id = ?", query["user_id"]).Find(&data)
+		result = repo.db.
+			Preload("User", func(db *gorm.DB) *gorm.DB {
+				return db.Select("user_id, name, created_at, updated_at")
+			}).
+			Preload("Vehicle", func(db *gorm.DB) *gorm.DB {
+				return db.Select("vehicle_id, name, created_at, updated_at")
+			}).
+			Order("created_at desc").
+			Where("user_id = ?", query["user_id"]).Find(&data)
 	}
 	if result.Error != nil {
 		return nil, errors.New("failed to get data vehicle")
