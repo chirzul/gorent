@@ -61,6 +61,8 @@ func getStatus(code int) (desc string) {
 		desc = "Forbidden"
 	case 404:
 		desc = "Not Found"
+	case 415:
+		desc = "Unsupported Media Type"
 	case 500:
 		desc = "Internal Server Error"
 	case 502:
