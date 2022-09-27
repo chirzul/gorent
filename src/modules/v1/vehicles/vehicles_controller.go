@@ -2,6 +2,7 @@ package vehicles
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/chirzul/gorent/src/interfaces"
 	"github.com/chirzul/gorent/src/libs"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
 )
 
 type vehicle_ctrl struct {
@@ -33,13 +35,15 @@ func (c *vehicle_ctrl) SearchVehicles(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *vehicle_ctrl) AddVehicle(w http.ResponseWriter, r *http.Request) {
-	var datas *models.Vehicle
-	err := json.NewDecoder(r.Body).Decode(&datas)
+	var datas models.Vehicle
+	datas.Image = fmt.Sprint(r.Context().Value("imageName"))
+
+	err := schema.NewDecoder().Decode(&datas, r.MultipartForm.Value)
 	if err != nil {
 		libs.GetResponse(err.Error(), 500, true)
 		return
 	}
-	c.svc.AddVehicle(datas).Send(w)
+	c.svc.AddVehicle(&datas).Send(w)
 }
 
 func (c *vehicle_ctrl) UpdateVehicle(w http.ResponseWriter, r *http.Request) {
