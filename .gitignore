@@ -17,3 +17,4 @@ vendor/
 .air.toml
 tmp
 .censitive
+uploads
