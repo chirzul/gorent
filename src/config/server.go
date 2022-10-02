@@ -20,7 +20,7 @@ func server(cmd *cobra.Command, args []string) error {
 	if mainRoute, err := routers.New(); err == nil {
 
 		address := "0.0.0.0:8080"
-		PORT := os.Getenv("APP_PORT")
+		PORT := os.Getenv("PORT")
 
 		if PORT != "" {
 			address = ":" + PORT
