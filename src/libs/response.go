@@ -68,7 +68,7 @@ func getStatus(code int) (desc string) {
 	case 502:
 		desc = "Bad Gateway"
 	default:
-		desc = ""
+		desc = "Status Code Undefined"
 	}
 	return
 }

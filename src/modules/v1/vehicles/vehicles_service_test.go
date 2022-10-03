@@ -38,7 +38,26 @@ func TestAddVehicle(t *testing.T) {
 	data := service.AddVehicle(&dataMock)
 
 	result := data.Data.(*models.Vehicle)
-	fmt.Println(result)
 
 	assert.Equal(t, dataMock.VehicleID, result.VehicleID, "expect id from data mock")
+}
+
+func TestSearchVehicles(t *testing.T) {
+	repo := RepoMock{mock.Mock{}}
+	service := NewService(&repo)
+
+	var dataMock = models.Vehicles{
+		{VehicleID: 1, Name: "Vespa"},
+		{VehicleID: 2, Name: "Beat"},
+	}
+
+	repo.mock.On("SearchVehicles", "vespa").Return(&dataMock, nil)
+	data := service.SearchVehicles("vespa")
+
+	result := data.Data.(*models.Vehicles)
+	fmt.Println(result)
+
+	for i, v := range *result {
+		assert.Equal(t, dataMock[i].VehicleID, v.VehicleID, "expect id from data mock")
+	}
 }

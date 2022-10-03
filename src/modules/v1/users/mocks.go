@@ -34,10 +34,10 @@ func (m *RepoMock) DeleteUser(data *models.User, username string) (*models.User,
 	return args.Get(0).(*models.User), nil
 }
 
-func (m *RepoMock) CheckUsername(username string) bool {
-	return true
+func (m *RepoMock) CheckUsername(username string) (result bool) {
+	return
 }
 
-func (m *RepoMock) CheckEmail(email string) bool {
-	return true
+func (m *RepoMock) CheckEmail(email string) (result bool) {
+	return
 }

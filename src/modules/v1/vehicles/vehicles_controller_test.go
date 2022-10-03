@@ -2,7 +2,6 @@ package vehicles
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http/httptest"
 	"testing"
 
@@ -39,8 +38,6 @@ func TestCtrlGetAllVehicles(t *testing.T) {
 	if err := json.Unmarshal(w.Body.Bytes(), &response); err != nil {
 		t.Fatal(err)
 	}
-
-	fmt.Println(response.Data)
 
 	assert.Equal(t, 200, w.Code, "status code must be 200")
 	assert.False(t, response.IsError, "isError must be false")

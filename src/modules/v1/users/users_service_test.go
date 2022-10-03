@@ -49,9 +49,9 @@ func TestAddUser(t *testing.T) {
 	repo.mock.On("AddUser", &dataMock).Return(&dataMock, nil)
 	data := service.AddUser(&dataMock)
 
-	result := data.Data
-	fmt.Println(result)
-	// assert.Equal(t, dataMock.UserID, result.UserID, "expect id from data mock")
+	result := data.Data.(*models.User)
+	fmt.Println(data)
+	assert.Equal(t, dataMock.UserID, result.UserID, "expect id from data mock")
 }
 
 func TestFindByUsername(t *testing.T) {
