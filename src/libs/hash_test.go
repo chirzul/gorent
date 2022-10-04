@@ -10,7 +10,7 @@ func TestHashPassword(t *testing.T) {
 	password := "password"
 	result, err := HashPassword(password)
 
-	assert.True(t, result != password, "Result must be exist")
+	assert.True(t, result != password, "Password must be hashed")
 	assert.Nil(t, err, "Error must be nil")
 }
 
