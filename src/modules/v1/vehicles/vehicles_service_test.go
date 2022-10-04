@@ -28,6 +28,24 @@ func TestGetAllVehicles(t *testing.T) {
 	}
 }
 
+func TestGetPopularVehicle(t *testing.T) {
+	repo := RepoMock{mock.Mock{}}
+	service := NewService(&repo)
+
+	var dataMock = models.Vehicles{
+		{VehicleID: 1, Name: "Vespa"},
+		{VehicleID: 2, Name: "Beat"},
+	}
+
+	repo.mock.On("GetPopularVehicles").Return(&dataMock, nil)
+	data := service.GetPopularVehicles()
+
+	result := data.Data.(*models.Vehicles)
+
+	for i, v := range *result {
+		assert.Equal(t, dataMock[i].VehicleID, v.VehicleID, "expect id from data mock")
+	}
+}
 func TestAddVehicle(t *testing.T) {
 	repo := RepoMock{mock.Mock{}}
 	service := NewService(&repo)
@@ -60,4 +78,28 @@ func TestSearchVehicles(t *testing.T) {
 	for i, v := range *result {
 		assert.Equal(t, dataMock[i].VehicleID, v.VehicleID, "expect id from data mock")
 	}
+}
+
+func TestUpdateVehicle(t *testing.T) {
+	repo := RepoMock{mock.Mock{}}
+	service := NewService(&repo)
+
+	var dataMock = models.Vehicle{VehicleID: 1, Name: "Vespa"}
+
+	repo.mock.On("UpdateVehicle", &dataMock, "1").Return(&dataMock, nil)
+	data := service.UpdateVehicle(&dataMock, "1")
+
+	assert.Equal(t, 200, data.Code, "expect id from data mock")
+}
+
+func TestDeleteVehicle(t *testing.T) {
+	repo := RepoMock{mock.Mock{}}
+	service := NewService(&repo)
+
+	var dataMock = models.Vehicle{VehicleID: 1, Name: "Vespa"}
+
+	repo.mock.On("DeleteVehicle", &dataMock, "1").Return(&dataMock, nil)
+	data := service.DeleteVehicle(&dataMock, "1")
+
+	assert.Equal(t, 200, data.Code, "expect id from data mock")
 }
