@@ -1,6 +1,8 @@
 package vehicles
 
 import (
+	"fmt"
+
 	"github.com/chirzul/gorent/src/databases/orm/models"
 	"github.com/chirzul/gorent/src/interfaces"
 	"github.com/chirzul/gorent/src/libs"
@@ -39,6 +41,7 @@ func (s *vehicle_service) SearchVehicles(name string) *libs.Response {
 }
 
 func (s *vehicle_service) AddVehicle(data *models.Vehicle) *libs.Response {
+	fmt.Println("test")
 	data, err := s.repo.AddVehicle(data)
 	if err != nil {
 		return libs.GetResponse(err.Error(), 400, true)
