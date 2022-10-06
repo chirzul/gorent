@@ -2,6 +2,7 @@ package vehicles
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -35,7 +36,8 @@ func (c *vehicle_ctrl) SearchVehicles(w http.ResponseWriter, r *http.Request) {
 
 func (c *vehicle_ctrl) AddVehicle(w http.ResponseWriter, r *http.Request) {
 	var datas models.Vehicle
-	datas.Image = r.Context().Value("imageName").(string)
+	imageName := r.Context().Value("imageName")
+	datas.Image = fmt.Sprint(imageName)
 
 	err := schema.NewDecoder().Decode(&datas, r.MultipartForm.Value)
 	if err != nil {
