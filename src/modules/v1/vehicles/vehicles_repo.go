@@ -18,7 +18,7 @@ func NewRepo(db *gorm.DB) *vehicle_repo {
 func (repo *vehicle_repo) GetAllVehicles() (*models.Vehicles, error) {
 	var data models.Vehicles
 
-	result := repo.db.Order("total_rented DESC").Limit(4).Find(&data)
+	result := repo.db.Order("total_rented DESC").Find(&data)
 
 	if result.Error != nil {
 		return nil, errors.New("failed to get data vehicle")
@@ -33,7 +33,7 @@ func (repo *vehicle_repo) GetAllVehicles() (*models.Vehicles, error) {
 func (repo *vehicle_repo) GetPopularVehicles() (*models.Vehicles, error) {
 	var data models.Vehicles
 
-	result := repo.db.Order("total_rented DESC").Find(&data)
+	result := repo.db.Order("total_rented DESC").Limit(4).Find(&data)
 
 	if result.Error != nil {
 		return nil, errors.New("failed to get data vehicle")
