@@ -22,7 +22,7 @@ func NewCtrl(s interfaces.VehicleService) *vehicle_ctrl {
 }
 
 func (c *vehicle_ctrl) GetAllVehicles(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://www.google.com")
+	w.Header().Set("Access-Control-Allow-Origin", "localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token")
 
