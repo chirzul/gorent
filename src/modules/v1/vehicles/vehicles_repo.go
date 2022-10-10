@@ -72,7 +72,7 @@ func (repo *vehicle_repo) GetVehiclesByCategory(category string) (*models.Vehicl
 func (re *vehicle_repo) VehicleDetail(id string) (*models.Vehicle, error) {
 	var data models.Vehicle
 
-	result := re.db.Where("vehicle_id = ?", id).Order("rating desc, total_rented desc").Find(&data)
+	result := re.db.Where("category = ?", id).Order("rating desc, total_rented desc").Find(&data)
 
 	if result.Error != nil {
 		return nil, errors.New("failed get vehicle detail")
