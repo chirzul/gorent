@@ -28,9 +28,6 @@ func (c *vehicle_ctrl) GetAllVehicles(w http.ResponseWriter, r *http.Request) {
 func (c *vehicle_ctrl) GetPopularVehicles(w http.ResponseWriter, r *http.Request) {
 	c.svc.GetPopularVehicles().Send(w)
 }
-func (c *vehicle_ctrl) GetVehicleById(w http.ResponseWriter, r *http.Request) {
-	c.svc.GetPopularVehicles().Send(w)
-}
 
 func (c *vehicle_ctrl) SearchVehicles(w http.ResponseWriter, r *http.Request) {
 	vars := strings.ToLower(r.URL.Query().Get("name"))
@@ -40,6 +37,10 @@ func (c *vehicle_ctrl) SearchVehicles(w http.ResponseWriter, r *http.Request) {
 func (c *vehicle_ctrl) GetVehiclesByCategory(w http.ResponseWriter, r *http.Request) {
 	vars := strings.ToLower(r.URL.Query().Get("category"))
 	c.svc.GetVehiclesByCategory(vars).Send(w)
+}
+func (c *vehicle_ctrl) GetVehicleById(w http.ResponseWriter, r *http.Request) {
+	vars := strings.ToLower(r.URL.Query().Get("id"))
+	c.svc.GetVehicleById(vars).Send(w)
 }
 
 func (c *vehicle_ctrl) AddVehicle(w http.ResponseWriter, r *http.Request) {
