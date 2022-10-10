@@ -23,8 +23,9 @@ func (m *RepoMock) GetVehiclesByCategory(category string) (*models.Vehicles, err
 	args := m.mock.Called(category)
 	return args.Get(0).(*models.Vehicles), nil
 }
-func (m *RepoMock) GetVehicleById(id string) (*models.Vehicles, error) {
-	args := m.mock.Called(id)
+
+func (m *RepoMock) GetVehicleById(category string) (*models.Vehicles, error) {
+	args := m.mock.Called(category)
 	return args.Get(0).(*models.Vehicles), nil
 }
 

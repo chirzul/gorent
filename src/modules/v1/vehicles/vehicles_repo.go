@@ -68,11 +68,12 @@ func (repo *vehicle_repo) GetVehiclesByCategory(category string) (*models.Vehicl
 	}
 	return &data, nil
 }
-func (repo *vehicle_repo) GetVehicleById(id string) (*models.Vehicles, error) {
+
+func (repo *vehicle_repo) GetVehicleById(category string) (*models.Vehicles, error) {
 	var data models.Vehicles
-	result := repo.db.Where("LOWER(vehicle_id) LIKE ?", id).Find(&data)
+	result := repo.db.Order("total_rented DESC").Where("LOWER(category) LIKE ?", "%"+category+"%").Find(&data)
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, errors.New("failed to get data vehicle")
 	}
 	if len(data) == 0 {
 		return nil, errors.New("vehicle not found")
