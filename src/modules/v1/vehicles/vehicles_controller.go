@@ -39,9 +39,11 @@ func (c *vehicle_ctrl) GetVehiclesByCategory(w http.ResponseWriter, r *http.Requ
 	c.svc.GetVehiclesByCategory(vars).Send(w)
 }
 
-func (c *vehicle_ctrl) GetVehicleById(w http.ResponseWriter, r *http.Request) {
-	vars := strings.ToLower(r.URL.Query().Get("category"))
-	c.svc.GetVehicleById(vars).Send(w)
+func (ctrl *vehicle_ctrl) VehicleDetail(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	data := ctrl.svc.VehicleDetail(id)
+	data.Send(w)
 }
 
 func (c *vehicle_ctrl) AddVehicle(w http.ResponseWriter, r *http.Request) {
