@@ -70,7 +70,7 @@ func (repo *vehicle_repo) GetVehiclesByCategory(category string) (*models.Vehicl
 }
 func (repo *vehicle_repo) GetVehicleById(id string) (*models.Vehicles, error) {
 	var data models.Vehicles
-	result := repo.db.Where("vehicle_id = ", id).Find(&data)
+	result := repo.db.Order("total_rented DESC").Where("LOWER(vehicle_id) LIKE ?", id).Find(&data)
 	if result.Error != nil {
 		return nil, errors.New("failed to get data vehicle")
 	}
