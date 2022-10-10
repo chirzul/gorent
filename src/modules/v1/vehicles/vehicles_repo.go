@@ -57,6 +57,18 @@ func (repo *vehicle_repo) SearchVehicles(name string) (*models.Vehicles, error) 
 	return &data, nil
 }
 
+func (repo *vehicle_repo) GetVehiclesByCategory(category string) (*models.Vehicles, error) {
+	var data models.Vehicles
+	result := repo.db.Order("total_rented DESC").Where("LOWER(category) LIKE ?", "%"+category+"%").Find(&data)
+	if result.Error != nil {
+		return nil, errors.New("failed to get data vehicle")
+	}
+	if len(data) == 0 {
+		return nil, errors.New("vehicle not found")
+	}
+	return &data, nil
+}
+
 func (repo *vehicle_repo) AddVehicle(data *models.Vehicle) (*models.Vehicle, error) {
 	result := repo.db.Create(data)
 	if result.Error != nil {
