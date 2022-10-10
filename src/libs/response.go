@@ -15,8 +15,8 @@ type Response struct {
 
 func (res *Response) Send(w http.ResponseWriter) {
 	w.Header().Set("Content-type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Allow-Origin", "https://gorentall.netlify.app")
+	w.Header().Set("Access-Control-Allow-Origin",
+		"http://localhost:3000, https://gorentall.netlify.app")
 	w.Header().Set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token")
 
