@@ -39,13 +39,6 @@ func (c *vehicle_ctrl) GetVehiclesByCategory(w http.ResponseWriter, r *http.Requ
 	c.svc.GetVehiclesByCategory(vars).Send(w)
 }
 
-func (ctrl *vehicle_ctrl) VehicleDetail(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
-	data := ctrl.svc.VehicleDetail(id)
-	data.Send(w)
-}
-
 func (c *vehicle_ctrl) AddVehicle(w http.ResponseWriter, r *http.Request) {
 	var datas models.Vehicle
 	imageName := r.Context().Value("imageName")

@@ -23,10 +23,6 @@ func (m *RepoMock) GetVehiclesByCategory(category string) (*models.Vehicles, err
 	args := m.mock.Called(category)
 	return args.Get(0).(*models.Vehicles), nil
 }
-func (m *RepoMock) VehicleDetail(id string) (*models.Vehicle, error) {
-	args := m.mock.Called(id)
-	return args.Get(0).(*models.Vehicle), nil
-}
 
 func (m *RepoMock) SearchVehicles(name string) (*models.Vehicles, error) {
 	args := m.mock.Called(name)

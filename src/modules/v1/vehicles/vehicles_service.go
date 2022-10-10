@@ -46,15 +46,6 @@ func (s *vehicle_service) GetVehiclesByCategory(category string) *libs.Response 
 	return libs.GetResponse(data, 200, false)
 }
 
-func (svc *vehicle_service) VehicleDetail(id string) *libs.Response {
-	data, err := svc.repo.VehicleDetail(id)
-
-	if err != nil {
-		return libs.GetResponse(err.Error(), 400, true)
-	}
-	return libs.GetResponse(data, 200, false)
-}
-
 func (s *vehicle_service) AddVehicle(data *models.Vehicle) *libs.Response {
 	data, err := s.repo.AddVehicle(data)
 	if err != nil {
