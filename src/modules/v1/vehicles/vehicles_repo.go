@@ -68,6 +68,17 @@ func (repo *vehicle_repo) GetVehiclesByCategory(category string) (*models.Vehicl
 	}
 	return &data, nil
 }
+func (repo *vehicle_repo) GetVehicleById(id string) (*models.Vehicles, error) {
+	var data models.Vehicles
+	result := repo.db.Where("vehicle_id = ", id).Find(&data)
+	if result.Error != nil {
+		return nil, errors.New("failed to get data vehicle")
+	}
+	if len(data) == 0 {
+		return nil, errors.New("vehicle not found")
+	}
+	return &data, nil
+}
 
 func (repo *vehicle_repo) AddVehicle(data *models.Vehicle) (*models.Vehicle, error) {
 	result := repo.db.Create(data)

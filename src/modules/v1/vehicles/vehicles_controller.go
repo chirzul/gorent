@@ -28,6 +28,9 @@ func (c *vehicle_ctrl) GetAllVehicles(w http.ResponseWriter, r *http.Request) {
 func (c *vehicle_ctrl) GetPopularVehicles(w http.ResponseWriter, r *http.Request) {
 	c.svc.GetPopularVehicles().Send(w)
 }
+func (c *vehicle_ctrl) GetVehicleById(w http.ResponseWriter, r *http.Request) {
+	c.svc.GetPopularVehicles().Send(w)
+}
 
 func (c *vehicle_ctrl) SearchVehicles(w http.ResponseWriter, r *http.Request) {
 	vars := strings.ToLower(r.URL.Query().Get("name"))

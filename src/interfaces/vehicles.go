@@ -9,6 +9,7 @@ type VehicleRepo interface {
 	GetAllVehicles() (*models.Vehicles, error)
 	GetPopularVehicles() (*models.Vehicles, error)
 	GetVehiclesByCategory(category string) (*models.Vehicles, error)
+	GetVehicleById(id string) (*models.Vehicles, error)
 	SearchVehicles(name string) (*models.Vehicles, error)
 	AddVehicle(data *models.Vehicle) (*models.Vehicle, error)
 	UpdateVehicle(data *models.Vehicle, id string) (*models.Vehicle, error)
@@ -20,6 +21,7 @@ type VehicleService interface {
 	GetAllVehicles() *libs.Response
 	GetPopularVehicles() *libs.Response
 	GetVehiclesByCategory(category string) *libs.Response
+	GetVehicleById(id string) *libs.Response
 	SearchVehicles(name string) *libs.Response
 	AddVehicle(data *models.Vehicle) *libs.Response
 	UpdateVehicle(data *models.Vehicle, id string) *libs.Response
