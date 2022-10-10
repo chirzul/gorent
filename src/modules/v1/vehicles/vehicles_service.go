@@ -45,6 +45,7 @@ func (s *vehicle_service) GetVehiclesByCategory(category string) *libs.Response 
 	}
 	return libs.GetResponse(data, 200, false)
 }
+
 func (s *vehicle_service) GetVehicleById(id string) *libs.Response {
 	data, err := s.repo.GetVehicleById(id)
 	if err != nil {
