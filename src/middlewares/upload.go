@@ -19,7 +19,7 @@ func Upload(next http.HandlerFunc) http.HandlerFunc {
 		}
 		defer file.Close()
 
-		fileName := time.Now().Format(time.UnixDate) + handlerFile.Filename
+		fileName := time.Now().Format(time.RFC822) + handlerFile.Filename
 		fileDestination, err := os.Create("uploads/" + fileName)
 		if err != nil {
 			libs.GetResponse(err.Error(), 400, true)
