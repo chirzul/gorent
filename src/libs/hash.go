@@ -8,6 +8,7 @@ func HashPassword(pass string) (string, error) {
 		return "", err
 	}
 	return string(hashPass), nil
+
 }
 
 func CheckPassword(dbPass, inputPass string) bool {
