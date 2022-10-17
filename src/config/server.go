@@ -19,15 +19,8 @@ var ServeCmd = &cobra.Command{
 
 func corsHandler() *cors.Cors {
 	t := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{
-			http.MethodHead,
-			http.MethodGet,
-			http.MethodPost,
-			http.MethodPut,
-			http.MethodPatch,
-			http.MethodDelete,
-		},
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"*"},
 		AllowedHeaders:   []string{"*"},
 		AllowCredentials: false,
 	})
