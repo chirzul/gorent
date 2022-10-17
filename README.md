@@ -31,12 +31,12 @@ go run . migrate --down //for rollback
 ```sh
   JWT_KEYS = Your JWT Key
   APP_PORT = Your Port
-  ###Database
+  # Database
   DB_USER = Your DB User
   DB_HOST = Your DB Host
   DB_NAME = Your DB Name
   DB_PASSWORD = Your DB Password
-  ###Cloudinary
+  # Cloudinary
   CLOUDINARY_NAME = Your Cloudinary cloud name
   CLOUDINARY_API_KEY = Your Cloudinary API key
   CLOUDINARY_API_SECRET = Your Cloudinary API secret
